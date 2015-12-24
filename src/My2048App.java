@@ -16,13 +16,14 @@ public class My2048App extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        Board board = new Board(4, 4);
+        Board board = new Board(2, 2);
         BoardView boardView = new BoardView(board);
 
         board.add(2);
         boardView.update();
 
         Scene scene = new Scene(boardView, 800, 600);
+        scene.getStylesheets().add("Style2048.css");
         boardView.requestFocus();
         primaryStage.setScene(scene);
         primaryStage.show();

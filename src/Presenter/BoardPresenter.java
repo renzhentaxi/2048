@@ -26,6 +26,7 @@ public class BoardPresenter
         if (model.canMove(dir))
         {
             model.move(dir);
+
             processChanges();
         }
 

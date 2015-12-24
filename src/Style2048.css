@@ -1,0 +1,12 @@
+.Board {
+    -fx-border-color: greenyellow;
+    -fx-background-color: greenyellow;
+}
+
+.Tile {
+    -fx-font-size: 60px;
+    -fx-font-weight: bolder;
+    -fx-border-color: darkcyan;
+    -fx-border-width: 10px;
+    -fx-alignment: center;
+}

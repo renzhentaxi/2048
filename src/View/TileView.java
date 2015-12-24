@@ -11,6 +11,8 @@ public class TileView extends Label
     {
         model = tile;
         setText(tile.toString());
+        setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        getStyleClass().add("Tile");
     }
 
 }

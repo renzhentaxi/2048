@@ -4,6 +4,7 @@ import Model.Change.ChangeType;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
 public class Board
 {
     public final Map<Location, Tile> MAP;
@@ -94,14 +95,18 @@ public class Board
             }
         }
 
-        if (hasRoom(1))
+        if (hasRoom(2))
         {
-            // add occurs here
             add(1);
-        } else if (!(canMove(Location.Left) || canMove(Location.Right) || canMove(Location.Up) || canMove(Location.Down)))
+        } else if (hasRoom(1)) // check for game over if there is only 1 more space
         {
-            System.out.println("game Over");
+            add(1);
+            if (!(canMove(Location.Left) || canMove(Location.Right) || canMove(Location.Up) || canMove(Location.Down)))
+            {
+                System.out.println("game Over");
+            }
         }
+
     }
 
     public boolean canMove(Location dir)

@@ -17,6 +17,7 @@ public class BoardView extends GridPane
     public BoardView(Board board)
     {
         presenter = new BoardPresenter(board, this);
+        getStyleClass().add("Board");
         wireKeyEvents();
     }
 
@@ -39,7 +40,6 @@ public class BoardView extends GridPane
             rc.setPercentHeight(cellHeight);
             getRowConstraints().add(rc);
         }
-        setGridLinesVisible(true);
     }
 
     public void update()
