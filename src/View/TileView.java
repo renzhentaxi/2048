@@ -1,9 +1,11 @@
+package View;
+
 import Model.Tile;
 import javafx.scene.control.Label;
 
 public class TileView extends Label
 {
-    Tile model;
+    public Tile model;
 
     public TileView(Tile tile)
     {

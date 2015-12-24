@@ -3,19 +3,19 @@ package Model;
 public class Change
 {
     public ChangeType type;
-    Location location;
-    Tile tile;
+    public Location loc;
+    public Tile tile;
 
-    public Change(ChangeType type, Tile tile, Location location)
+    public Change(ChangeType type, Tile tile, Location loc)
     {
         this.type = type;
         this.tile = tile;
-        this.location = location;
+        this.loc = loc;
     }
 
     public enum ChangeType
     {
-        add, remove, shift, promote,
+        add, shift, promote, remove
     }
 
 }

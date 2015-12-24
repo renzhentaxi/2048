@@ -1,4 +1,5 @@
 import Model.Board;
+import View.BoardView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -19,6 +20,8 @@ public class My2048App extends Application
         BoardView boardView = new BoardView(board);
 
         board.add(2);
+        boardView.update();
+
         Scene scene = new Scene(boardView, 800, 600);
         boardView.requestFocus();
         primaryStage.setScene(scene);

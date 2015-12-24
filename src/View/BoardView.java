@@ -1,5 +1,8 @@
+package View;
+
 import Model.Board;
 import Model.Location;
+import Presenter.BoardPresenter;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.ColumnConstraints;
@@ -39,6 +42,10 @@ public class BoardView extends GridPane
         setGridLinesVisible(true);
     }
 
+    public void update()
+    {
+        presenter.processChanges();
+    }
 
     private void wireKeyEvents()
     {
@@ -49,16 +56,21 @@ public class BoardView extends GridPane
                     switch (me.getCode())
                     {
                         case LEFT:
+                        case A:
                             dir = Location.Left;
                             break;
                         case RIGHT:
+                        case D:
                             dir = Location.Right;
                             break;
                         case UP:
+                        case W:
                             dir = Location.Up;
                             break;
                         case DOWN:
+                        case S:
                             dir = Location.Down;
+                            break;
                     }
 
                     if (dir != null)
@@ -68,4 +80,5 @@ public class BoardView extends GridPane
                 }
         );
     }
+
 }
