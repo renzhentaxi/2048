@@ -31,7 +31,7 @@ public class Board
             }
         }
 
-        RAN_GEN = new Random(0);
+        RAN_GEN = new Random();
         moveCount = 0;
         changes = new ArrayList<>(CAPACITY);
     }

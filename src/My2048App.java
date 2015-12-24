@@ -16,7 +16,7 @@ public class My2048App extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        Board board = new Board(2, 2);
+        Board board = new Board(4, 4);
         BoardView boardView = new BoardView(board);
 
         board.add(2);
