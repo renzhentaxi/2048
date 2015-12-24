@@ -6,7 +6,6 @@ import Model.Location;
 import Model.Tile;
 import View.BoardView;
 import View.TileView;
-import javafx.scene.layout.GridPane;
 
 
 public class BoardPresenter
@@ -45,13 +44,15 @@ public class BoardPresenter
             {
                 case add:
                 {
-                    view.add(new TileView(change.tile), change.loc.X, change.loc.Y);
+                    TileView tv = new TileView(change.tile);
+                    view.add(tv, change.loc.X, change.loc.Y);
+                    tv.animCreated();
                     break;
                 }
                 case shift:
                 {
                     TileView tv = getTileView(change.tile);
-                    GridPane.setConstraints(tv, change.loc.X, change.loc.Y);
+                    tv.animMove(change.loc);
                     break;
                 }
                 case promote:
