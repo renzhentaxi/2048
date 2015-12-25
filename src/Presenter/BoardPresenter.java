@@ -52,29 +52,12 @@ public class BoardPresenter
                 tv = new TileView(change.tile);
             }
 
-            switch (change.type)
+            if (change.type == Change.ChangeType.add)
             {
-                case add:
-                {
-                    view.add(tv, change.loc.X, change.loc.Y);
-                    tv.animCreate();
-                    break;
-                }
-                case shift:
-                {
-                    tv.animMove(change.loc);
-                    break;
-                }
-                case merge:
-                {
-                    tv.animMove(change.loc);
-                    tv.animMerge();
-                    break;
-                }
-                case remove:
-                    tv.animDestroy();
-                    break;
+                view.add(tv, change.loc.X, change.loc.Y);
             }
+
+            tv.addAnimation(change);
         }
         model.changes.clear();
 

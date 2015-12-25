@@ -66,6 +66,7 @@ public class Board
         {
             Location shiftLoc = loc;
             Location adjacent = loc.translate(dir);
+            Change shiftChange = null;
             while (isValidLoc(adjacent) && isEmpty(adjacent))
             {
                 shiftLoc = adjacent;
@@ -78,18 +79,27 @@ public class Board
                 MAP.put(shiftLoc, tile);
                 MAP.remove(loc);
 
-                changes.add(new Change(ChangeType.shift, tile, shiftLoc));
+                shiftChange = new Change(ChangeType.shift, tile, shiftLoc);
+                changes.add(shiftChange);
+
             }
             if (isValidLoc(adjacent) && canMerge(shiftLoc, adjacent) && !Merged.contains(adjacent))
             {
-                // merge occurs here
+                // promote occurs here
                 Tile tile = MAP.get(shiftLoc);
                 Tile adjTile = MAP.get(adjacent);
                 MAP.remove(shiftLoc);
                 MAP.put(adjacent, tile.promote());
                 Merged.add(adjacent);
-
-                changes.add(new Change(ChangeType.merge, tile, adjacent));
+                if (shiftChange == null)
+                {
+                    shiftChange = new Change(ChangeType.shift, tile, adjacent);
+                    changes.add(shiftChange);
+                } else
+                {
+                    shiftChange.loc = adjacent;
+                }
+                changes.add(new Change(ChangeType.promote, tile, adjacent));
                 changes.add(new Change(ChangeType.remove, adjTile, null));
             }
         }

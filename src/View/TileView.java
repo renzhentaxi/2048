@@ -1,25 +1,21 @@
 package View;
 
-import Model.Location;
+import Model.Change;
 import Model.Tile;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileView extends Label
 {
     public final Tile model;
-    private final Timeline timeline;
-    private Location moveTo;
-    private boolean add = false;
-    private boolean move = false;
-    private boolean merge = false;
-    private boolean destroy = false;
+    private boolean destroyOnFinish = false;
+    private List<Timeline> animationQueue;
+
+
     public TileView(Tile tile)
     {
         model = tile;
@@ -27,108 +23,51 @@ public class TileView extends Label
         setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
         getStyleClass().add("Tile");
 
-        timeline = new Timeline();
+        animationQueue = new ArrayList<>();
     }
 
-    private void update()
+    public void update()
     {
         setText(model.toString());
     }
 
-    public void animMove(Location to)
+    public synchronized void playAnim()
     {
-        move = true;
-        moveTo = to;
-    }
-
-    public void animCreate()
-    {
-        add = true;
-        setScaleX(0d);
-        setScaleX(0d);
-    }
-
-
-    public void animMerge()
-    {
-        merge = true;
-    }
-
-
-    public void animDestroy()
-    {
-        destroy = true;
-        toBack();
-    }
-
-    public void playAnim()
-    {
-        if (add)
+        if (animationQueue.size() > 0)
         {
-            add = false;
-            KeyValue iScaleX = new KeyValue(scaleXProperty(), 0d);
-            KeyValue iScaleY = new KeyValue(scaleYProperty(), 0d);
-
-            KeyValue fScaleX = new KeyValue(scaleXProperty(), 1d);
-            KeyValue fScaleY = new KeyValue(scaleYProperty(), 1d);
-            KeyFrame iFrame = new KeyFrame(Duration.millis(150d), iScaleX, iScaleY);
-            KeyFrame fFrame = new KeyFrame(Duration.millis(300d), fScaleX, fScaleY);
-
-            timeline.getKeyFrames().addAll(iFrame, fFrame);
-        } else if (destroy)
-        {
-            KeyFrame frame = new KeyFrame(Duration.millis(310d));
-            timeline.getKeyFrames().add(frame);
-        } else if (move)
-        {
-            move = false;
-            DoubleProperty target;
-            double endValue;
-            if (GridPane.getColumnIndex(this) == moveTo.X)
+            for (int i = 0; i < animationQueue.size() - 1; i++)
             {
-                //vertical
-                target = translateYProperty();
-                endValue = moveTo.Y * getHeight() - getLayoutY();
-
-            } else
-            {
-                target = translateXProperty();
-                endValue = moveTo.X * getWidth() - getLayoutX();
+                Timeline next = animationQueue.get(i + 1);
+                animationQueue.get(i).setOnFinished(ae -> next.play());
             }
-            KeyValue fValue = new KeyValue(target, endValue);
-            KeyFrame mFrame = new KeyFrame(Duration.millis(300d), event -> {
-                target.set(0d);
-                GridPane.setConstraints(this, moveTo.X, moveTo.Y);
-            }, fValue);
-            timeline.getKeyFrames().add(mFrame);
-
-
+            animationQueue.get(animationQueue.size() - 1).setOnFinished(ae -> {
+                if (destroyOnFinish)
+                {
+                    ((Pane) getParent()).getChildren().remove(this);
+                }
+                animationQueue.clear();
+            });
+            animationQueue.get(0).play();
         }
+    }
 
-        timeline.play();
-        timeline.setOnFinished(ae -> {
-            if (destroy)
-            {
-                ((Pane) getParent()).getChildren().remove(this);
-            }
-            if (merge)
-            {
-                update();
-                merge = false;
-                KeyValue iScaleX = new KeyValue(scaleXProperty(), 1d);
-                KeyValue iScaleY = new KeyValue(scaleYProperty(), 1d);
-                KeyValue fScaleX = new KeyValue(scaleXProperty(), 1.2d);
-                KeyValue fScaleY = new KeyValue(scaleYProperty(), 1.2d);
-
-                KeyFrame f2Frame = new KeyFrame(Duration.millis(100d), fScaleX, fScaleY);
-                KeyFrame f3Frame = new KeyFrame(Duration.millis(200d), iScaleX, iScaleY);
-
-                Timeline mergeTimeLine = new Timeline(f2Frame, f3Frame);
-                mergeTimeLine.play();
-
-            }
-            timeline.getKeyFrames().clear();
-
-        });
+    public synchronized void addAnimation(Change change)
+    {
+        switch (change.type)
+        {
+            case add:
+                animationQueue.add(TileAnimationFactory.genCreateAnimation(this));
+                break;
+            case shift:
+                animationQueue.add(TileAnimationFactory.genShiftAnimation(this, change.loc));
+                break;
+            case promote:
+                animationQueue.add(TileAnimationFactory.genPromoteAnimation(this));
+                break;
+            case remove:
+                destroyOnFinish = true;
+                animationQueue.add(TileAnimationFactory.genRemoveAnimation(this));
+                break;
+        }
     }
 }

@@ -3,8 +3,8 @@ package Model;
 public class Change
 {
     public final ChangeType type;
-    public final Location loc;
     public final Tile tile;
+    public Location loc;
 
     public Change(ChangeType type, Tile tile, Location loc)
     {
@@ -15,7 +15,7 @@ public class Change
 
     public enum ChangeType
     {
-        add, shift, merge, remove
+        add, shift, promote, remove
     }
 
 }
