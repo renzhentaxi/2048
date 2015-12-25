@@ -13,8 +13,8 @@ import javafx.util.Duration;
 
 public class TileView extends Label
 {
-    public Tile model;
-    public Timeline timeline;
+    public final Tile model;
+    private final Timeline timeline;
     private Location moveTo;
     private boolean add = false;
     private boolean move = false;
@@ -30,7 +30,7 @@ public class TileView extends Label
         timeline = new Timeline();
     }
 
-    public void update()
+    private void update()
     {
         setText(model.toString());
     }

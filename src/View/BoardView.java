@@ -11,8 +11,7 @@ import javafx.scene.layout.RowConstraints;
 
 public class BoardView extends GridPane
 {
-    BoardPresenter presenter;
-    double cellWidth, cellHeight;
+    private final BoardPresenter presenter;
 
     public BoardView(Board board)
     {
@@ -24,8 +23,8 @@ public class BoardView extends GridPane
 
     public void layoutBoard(int column, int row)
     {
-        cellHeight = 100d / row;
-        cellWidth = 100d / column;
+        double cellHeight = 100d / row;
+        double cellWidth = 100d / column;
         for (int i = 0; i < column; i++)
         {
             ColumnConstraints cc = new ColumnConstraints();

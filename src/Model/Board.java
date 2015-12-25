@@ -7,11 +7,13 @@ import java.util.stream.Collectors;
 
 public class Board
 {
-    public final Map<Location, Tile> MAP;
-    public final int ROW_COUNT, COL_COUNT, CAPACITY;
-    public final List<Location> ALL_LOCS;
-    public final Random RAN_GEN;
-    public List<Change> changes;
+    public final int ROW_COUNT;
+    public final int COL_COUNT;
+    public final List<Change> changes;
+    private final Map<Location, Tile> MAP;
+    private final int CAPACITY;
+    private final List<Location> ALL_LOCS;
+    private final Random RAN_GEN;
     private int moveCount;
 
     //Constructors

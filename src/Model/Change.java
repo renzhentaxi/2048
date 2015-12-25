@@ -2,9 +2,9 @@ package Model;
 
 public class Change
 {
-    public ChangeType type;
-    public Location loc;
-    public Tile tile;
+    public final ChangeType type;
+    public final Location loc;
+    public final Tile tile;
 
     public Change(ChangeType type, Tile tile, Location loc)
     {

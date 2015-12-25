@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public class BoardPresenter
 {
-    Board model;
-    BoardView view;
+    private final Board model;
+    private final BoardView view;
 
     public BoardPresenter(Board board, BoardView boardView)
     {
