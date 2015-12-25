@@ -82,16 +82,13 @@ public class Board
             {
                 // merge occurs here
                 Tile tile = MAP.get(shiftLoc);
-                Tile tile2 = MAP.get(adjacent);
-                Tile promoted = tile.promote();
+                Tile adjTile = MAP.get(adjacent);
                 MAP.remove(shiftLoc);
-                MAP.put(adjacent, promoted);
+                MAP.put(adjacent, tile.promote());
                 Merged.add(adjacent);
-                changes.add(new Change(ChangeType.shift, tile, adjacent));
-                changes.add(new Change(ChangeType.remove, tile, adjacent));
-                changes.add(new Change(ChangeType.remove, tile2, adjacent));
-                changes.add(new Change(ChangeType.promote, promoted, adjacent));
 
+                changes.add(new Change(ChangeType.merge, tile, adjacent));
+                changes.add(new Change(ChangeType.remove, adjTile, null));
             }
         }
 
@@ -143,6 +140,6 @@ public class Board
     {
         Tile t1 = MAP.get(loc1);
         Tile t2 = MAP.get(loc2);
-        return t1.VALUE == t2.VALUE;
+        return t1.value == t2.value;
     }
 }

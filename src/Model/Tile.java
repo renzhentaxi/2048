@@ -3,21 +3,22 @@ package Model;
 
 public class Tile
 {
-    public final int VALUE;
+    public int value;
 
     public Tile(int value)
     {
-        VALUE = value;
+        this.value = value;
     }
 
     public Tile promote()
     {
-        return new Tile(VALUE * 2);
+        value *= 2;
+        return this;
     }
 
     @Override
     public String toString()
     {
-        return Integer.toString(VALUE);
+        return Integer.toString(value);
     }
 }

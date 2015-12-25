@@ -7,6 +7,8 @@ import Model.Tile;
 import View.BoardView;
 import View.TileView;
 
+import java.util.Optional;
+
 
 public class BoardPresenter
 {
@@ -25,50 +27,58 @@ public class BoardPresenter
         if (model.canMove(dir))
         {
             model.move(dir);
-
             processChanges();
+
         }
 
     }
 
-    private TileView getTileView(Tile tile)
+    private Optional<TileView> getTileView(Tile tile)
     {
-        return view.getChildren().stream().filter(node -> node instanceof TileView).map(node -> (TileView) node).filter(tileView -> tileView.model == tile).findFirst().get();
+        return view.getChildren().stream().filter(node -> node instanceof TileView).map(node -> (TileView) node).filter(tileView -> tileView.model == tile).findFirst();
     }
 
     public void processChanges()
     {
         for (Change change : model.changes)
         {
+            Optional<TileView> otv = getTileView(change.tile);
+            TileView tv;
+            if (otv.isPresent())
+            {
+                tv = otv.get();
+            } else
+            {
+                tv = new TileView(change.tile);
+            }
+
             switch (change.type)
             {
                 case add:
                 {
-                    TileView tv = new TileView(change.tile);
                     view.add(tv, change.loc.X, change.loc.Y);
-                    tv.animCreated();
+                    tv.animCreate();
                     break;
                 }
                 case shift:
                 {
-                    TileView tv = getTileView(change.tile);
                     tv.animMove(change.loc);
                     break;
                 }
-                case promote:
+                case merge:
                 {
-                    view.add(new TileView(change.tile), change.loc.X, change.loc.Y);
+                    tv.animMove(change.loc);
+                    tv.animMerge();
                     break;
                 }
                 case remove:
-                {
-                    TileView tv = getTileView(change.tile);
-                    view.getChildren().remove(tv);
-                }
-
+                    tv.animDestroy();
+                    break;
             }
         }
         model.changes.clear();
+
+        view.getChildren().stream().filter(node -> node instanceof TileView).map(node -> (TileView) node).forEach(tv -> tv.playAnim());
     }
 
 

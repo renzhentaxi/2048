@@ -15,7 +15,7 @@ public class Change
 
     public enum ChangeType
     {
-        add, shift, promote, remove
+        add, shift, merge, remove
     }
 
 }
