@@ -14,16 +14,12 @@ public class TileAnimationFactory
 {
     public static Timeline genCreateAnimation(TileView tileView)
     {
-        KeyValue iScaleX = new KeyValue(tileView.scaleXProperty(), 0d);
-        KeyValue iScaleY = new KeyValue(tileView.scaleYProperty(), 0d);
-
         KeyValue fScaleX = new KeyValue(tileView.scaleXProperty(), 1d);
         KeyValue fScaleY = new KeyValue(tileView.scaleYProperty(), 1d);
 
-        KeyFrame iFrame = new KeyFrame(Duration.ZERO, iScaleX, iScaleY);
-        KeyFrame fFrame = new KeyFrame(Duration.millis(300d), fScaleX, fScaleY);
+        KeyFrame frame2 = new KeyFrame(Duration.millis(300d), fScaleX, fScaleY);
 
-        return new Timeline(iFrame, fFrame);
+        return new Timeline(frame2);
     }
 
     public static Timeline genPromoteAnimation(TileView tileView)
@@ -67,7 +63,7 @@ public class TileAnimationFactory
         };
 
         KeyValue fValue = new KeyValue(target, endValue);
-        KeyFrame fFrame = new KeyFrame(Duration.millis(displacement * 100), onFinished, fValue);
+        KeyFrame fFrame = new KeyFrame(Duration.millis(displacement * 75d), onFinished, fValue);
 
         return new Timeline(fFrame);
     }
